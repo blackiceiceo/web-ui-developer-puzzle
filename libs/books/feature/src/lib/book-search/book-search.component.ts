@@ -1,21 +1,28 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy} from '@angular/core';
 import { Store } from '@ngrx/store';
 import {
   addToReadingList,
   clearSearch,
   getAllBooks,
   ReadingListBook,
-  searchBooks
+  searchBooks,
 } from '@tmo/books/data-access';
 import { FormBuilder } from '@angular/forms';
+import { debounceTime, distinctUntilChanged, map ,takeUntil} from 'rxjs/operators';
+import { ReplaySubject } from 'rxjs';
 import { Book } from '@tmo/shared/models';
 
 @Component({
   selector: 'tmo-book-search',
   templateUrl: './book-search.component.html',
-  styleUrls: ['./book-search.component.scss']
+  styleUrls: ['./book-search.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BookSearchComponent implements OnInit {
+export class BookSearchComponent implements OnInit, OnDestroy{
+
+  public instantSearchText: string;
+  private destroy: ReplaySubject<any> = new ReplaySubject<any>();
+
   books: ReadingListBook[];
 
   searchForm = this.fb.group({
@@ -24,7 +31,8 @@ export class BookSearchComponent implements OnInit {
 
   constructor(
     private readonly store: Store,
-    private readonly fb: FormBuilder
+    private readonly fb: FormBuilder,
+    private readonly cdr: ChangeDetectorRef,
   ) {}
 
   get searchTerm(): string {
@@ -32,6 +40,14 @@ export class BookSearchComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+    this.searchForm.valueChanges.pipe(map(val => val.term),debounceTime(500), distinctUntilChanged(),
+    takeUntil(this.destroy)).subscribe(value => {
+      this.instantSearchText = value;
+      this.searchBooks();
+      this.cdr.detectChanges();
+    })
+
     this.store.select(getAllBooks).subscribe(books => {
       this.books = books;
     });
@@ -58,5 +74,10 @@ export class BookSearchComponent implements OnInit {
     } else {
       this.store.dispatch(clearSearch());
     }
+  }
+
+  ngOnDestroy() {
+    this.destroy.next();
+    this.destroy.complete();
   }
 }
