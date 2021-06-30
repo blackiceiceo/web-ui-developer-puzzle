@@ -46,7 +46,7 @@ export class BookSearchComponent implements OnInit, OnDestroy{
       this.instantSearchText = value;
       this.searchBooks();
       this.cdr.detectChanges();
-    })
+    });
 
     this.store.select(getAllBooks).subscribe(books => {
       this.books = books;
