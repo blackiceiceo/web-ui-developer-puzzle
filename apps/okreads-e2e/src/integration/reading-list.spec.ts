@@ -1,6 +1,9 @@
 describe('When: I use the reading list feature', () => {
   beforeEach(() => {
     cy.startAt('/');
+    // cy.get('[data-testing="toggle-reading-list"]').click();
+    // cy.get('[data-testing="remove-reading-list"]').click({multiple:true});
+
   });
 
   it('Then: I should see my reading list', () => {

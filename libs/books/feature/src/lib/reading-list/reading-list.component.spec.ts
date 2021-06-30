@@ -13,7 +13,7 @@ describe('ReadingListComponent', () => {
   let component: ReadingListComponent;
   let fixture: ComponentFixture<ReadingListComponent>;
   let loader: HarnessLoader;
-  let options = {      
+  const options = {      
     message: "Book is being removed from Reading List",
     action: "Undo",
     options: {

@@ -14,7 +14,7 @@ describe('BookSearchListComponent', () => {
   let component: BookSearchComponent;
   let fixture: ComponentFixture<BookSearchComponent>;
   let loader: HarnessLoader;
-  let options = {      
+  const options = {      
     message: "Book is being added to Reading List",
     action: "Undo",
     options: {
