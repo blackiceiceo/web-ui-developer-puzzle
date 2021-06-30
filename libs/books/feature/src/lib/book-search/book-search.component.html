@@ -33,12 +33,13 @@
           <div>
             <button
               mat-flat-button
+              data-testing="add-book"
               [attr.aria-label] = "'Read ' + b.title + ' by ' + b.authors.join(',')"
               color="primary"
               (click)="addBookToReadingList(b)"
               [disabled]="b.isAdded"
             >
-              Want to Read
+             {{ b.finished ? 'Finished' : 'Want to Read'}}
             </button>
           </div>
         </div>
