@@ -13,8 +13,8 @@ export class ReadingListComponent {
   checked: Boolean;
 
   constructor(
-    private readonly store: Store,
-    private readonly snackBar: MatSnackBar) {}
+    private readonly store: Store
+  ) {}
 
   removeFromReadingList(item) {
     this.store.dispatch(removeFromReadingList({ item }));

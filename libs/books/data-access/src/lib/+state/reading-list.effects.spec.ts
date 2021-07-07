@@ -4,9 +4,10 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { HttpTestingController } from '@angular/common/http/testing';
 
-import { SharedTestingModule } from '@tmo/shared/testing';
+import { createReadingListItem, SharedTestingModule } from '@tmo/shared/testing';
 import { ReadingListEffects } from './reading-list.effects';
 import * as ReadingListActions from './reading-list.actions';
+import { ReadingListItem } from '@tmo/shared/models';
 
 describe('ToReadEffects', () => {
   let actions: ReplaySubject<any>;
@@ -42,4 +43,47 @@ describe('ToReadEffects', () => {
       httpMock.expectOne('/api/reading-list').flush([]);
     });
   });
+
+  it('should finish reading the book', done => {
+    const item: ReadingListItem = createReadingListItem('A');
+    actions = new ReplaySubject();
+    actions.next(ReadingListActions.markedAsFinishedReading({item}));
+
+    const finishedBook = {
+      ...item,
+      finished: true,
+      finishedDate: new Date().toISOString()
+    };
+
+    effects.markBookAsFinished$.subscribe(action => {
+      expect(action).toEqual(ReadingListActions.confirmedMarkedAsFinishedReading({ item: finishedBook}));
+      done();
+    });
+
+    httpMock.expectOne({
+      url: `/api/reading-list/${item.bookId}/finished`,
+      method: 'put'
+    }).flush(finishedBook);
+  })
+
+  it('should throw finish reading book api error', done => {
+    const item: ReadingListItem = createReadingListItem('A');
+    actions = new ReplaySubject();
+    actions.next(ReadingListActions.markedAsFinishedReading({item}));
+
+    const readingListAction = ReadingListActions.failedToMarkedAsFinished({
+      item: {...item, finished: false, finishedDate: ''}
+    });
+
+    effects.markBookAsFinished$.subscribe(action =>{
+      expect(action.type).toEqual(readingListAction.type);
+      done();
+    });
+
+    httpMock.expectOne({
+      url: `/api/reading-list/${item.bookId}/finished`,
+      method: 'put'
+    }).error(null);
+  })
+
 });

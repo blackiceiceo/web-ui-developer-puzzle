@@ -51,6 +51,32 @@ describe('Books Reducer', () => {
 
       expect(result.ids).toEqual(['A', 'B', 'C']);
     });
+
+    it('confirmedMarkAsFinished should display finished as true', () =>{
+      const readingList = {
+        ...createReadingListItem('A'),
+        finished: true,
+        finishedDate: new Date().toISOString()
+      };
+      const actions = ReadingListActions.confirmedMarkedAsFinishedReading({item: readingList});
+
+      const result: State = reducer(state, actions);
+
+      expect(result.entities['A'].finished).toBeTruthy();
+    });
+
+    it('failedToMarkAsFinished should display false', () => {
+      const readingList = {
+        ...createReadingListItem('A'),
+        finished: false,
+        finishedDate: ''
+      };
+      const actions = ReadingListActions.failedToMarkedAsFinished({item: readingList});
+
+      const result: State = reducer(state, actions);
+      
+      expect(result.entities['A'].finished).toBeFalsy();
+    })
   });
 
   describe('unknown action', () => {
