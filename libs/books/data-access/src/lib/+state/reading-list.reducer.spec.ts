@@ -52,7 +52,7 @@ describe('Books Reducer', () => {
       expect(result.ids).toEqual(['A', 'B', 'C']);
     });
 
-    it('confirmedMarkAsFinished should display finished as true', () =>{
+    it('confirmedMarkAsFinished should display finished as true when succussfully finish book', () =>{
       const readingList = {
         ...createReadingListItem('A'),
         finished: true,
@@ -65,7 +65,7 @@ describe('Books Reducer', () => {
       expect(result.entities['A'].finished).toBeTruthy();
     });
 
-    it('failedToMarkAsFinished should display false', () => {
+    it('failedToMarkAsFinished should display false when failed to mark book as finish', () => {
       const readingList = {
         ...createReadingListItem('A'),
         finished: false,

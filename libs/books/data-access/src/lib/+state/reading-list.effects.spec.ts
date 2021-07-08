@@ -10,6 +10,7 @@ import * as ReadingListActions from './reading-list.actions';
 import { ReadingListItem } from '@tmo/shared/models';
 
 describe('ToReadEffects', () => {
+  const item: ReadingListItem = createReadingListItem('A');
   let actions: ReplaySubject<any>;
   let effects: ReadingListEffects;
   let httpMock: HttpTestingController;
@@ -44,8 +45,7 @@ describe('ToReadEffects', () => {
     });
   });
 
-  it('should finish reading the book', done => {
-    const item: ReadingListItem = createReadingListItem('A');
+  it('should finish reading the book when click on mark as finished', done => {
     actions = new ReplaySubject();
     actions.next(ReadingListActions.markedAsFinishedReading({item}));
 
@@ -66,8 +66,7 @@ describe('ToReadEffects', () => {
     }).flush(finishedBook);
   })
 
-  it('should throw finish reading book api error', done => {
-    const item: ReadingListItem = createReadingListItem('A');
+  it('should throw finish reading book api error when failed to mark finish', done => {
     actions = new ReplaySubject();
     actions.next(ReadingListActions.markedAsFinishedReading({item}));
 
@@ -76,7 +75,7 @@ describe('ToReadEffects', () => {
     });
 
     effects.markBookAsFinished$.subscribe(action =>{
-      expect(action.type).toEqual(readingListAction.type);
+      expect(action).toEqual(readingListAction);
       done();
     });
 
