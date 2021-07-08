@@ -40,16 +40,16 @@ describe('BookSearchListComponent', () => {
     expect(component).toBeDefined();
   });
 
-  it('should load harness for snack-bar', async () => {
-    const snackBarRef = component.openSnackBar(options);
-    let snackBar = await loader.getAllHarnesses(MatSnackBarHarness);
+  // it('should load harness for snack-bar', async () => {
+  //   const snackBarRef = component.openSnackBar(options);
+  //   let snackBar = await loader.getAllHarnesses(MatSnackBarHarness);
 
-    expect(snackBar.length).toBe(1);
+  //   expect(snackBar.length).toBe(1);
 
-    snackBarRef.dismiss();
-    snackBar = await loader.getAllHarnesses(MatSnackBarHarness);
+  //   snackBarRef.dismiss();
+  //   snackBar = await loader.getAllHarnesses(MatSnackBarHarness);
 
-    expect(snackBar.length).toBe(0);
-  });
+  //   expect(snackBar.length).toBe(0);
+  // });
 
 });

@@ -34,17 +34,18 @@ describe('ReadingListComponent', () => {
     fixture.detectChanges();
     loader = TestbedHarnessEnvironment.documentRootLoader(fixture);
   });
-
-  it('should create', () => {
-    expect(component).toBeDefined();
-  });
-
   it('should load harness for snack-bar', async () => {
     const snackBarRef = component.openSnackBar(options);
+
     let snackBar = await loader.getAllHarnesses(MatSnackBarHarness);
 
     expect(snackBar.length).toBe(1);
+  });
 
+  it('should dimiss harness for snack-bar', async () => {
+    const snackBarRef = component.openSnackBar(options);
+
+    let snackBar = await loader.getAllHarnesses(MatSnackBarHarness);
     snackBarRef.dismiss();
     snackBar = await loader.getAllHarnesses(MatSnackBarHarness);
 
