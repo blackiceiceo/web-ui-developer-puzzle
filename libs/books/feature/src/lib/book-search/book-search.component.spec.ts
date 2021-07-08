@@ -43,21 +43,22 @@ describe('BookSearchComponent', () => {
     expect(component).toBeDefined();
   });
 
-  it('should call dispatch action searchBooks after 500ms when the term is changed and not before', fakeAsync(() => {
-    component.searchForm.setValue({term: 'A'});
-    tick(300);
-    expect(dispatchSpy).not.toHaveBeenCalled();
+  it('should call dispatch action searchBooks after 500ms when the term is changed', fakeAsync(() => {
     component.searchForm.setValue({term: 'AB'});
+
     tick(500);
+    fixture.detectChanges();
+
     expect(dispatchSpy).toHaveBeenCalledWith(searchBooks({term: 'AB'}));
   }));
 
-  it('should show a list of books when the user is typing', fakeAsync(() => {
+  it('should not call dispatch action before 500ms', fakeAsync(() => {
     component.searchForm.setValue({term: 'A'});
-    tick(500);
-    expect(dispatchSpy).toHaveBeenCalledWith(searchBooks({term: 'A'}));
 
-    expect(component.books.length).toEqual(2);
+    tick(100);
+    fixture.detectChanges();
+
+    expect(dispatchSpy).not.toHaveBeenCalledWith(searchBooks({term: 'A'}));
   }));
 
 });
