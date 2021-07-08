@@ -5,9 +5,11 @@ import { of } from 'rxjs';
 import { catchError, concatMap, exhaustMap, map } from 'rxjs/operators';
 import { ReadingListItem } from '@tmo/shared/models';
 import * as ReadingListActions from './reading-list.actions';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable()
 export class ReadingListEffects implements OnInitEffects {
+
   loadReadingList$ = createEffect(() =>
     this.actions$.pipe(
       ofType(ReadingListActions.init),
@@ -29,7 +31,10 @@ export class ReadingListEffects implements OnInitEffects {
       ofType(ReadingListActions.addToReadingList),
       concatMap(({ book }) =>
         this.http.post('/api/reading-list', book).pipe(
-          map(() => ReadingListActions.confirmedAddToReadingList({ book })),
+          map(() => 
+            ReadingListActions.confirmedAddToReadingList({ book }),
+ //           this.snackBar.open(this.message).onAction().subscribe(()=> {    ReadingListActions.removeFromReadingList({item: {bookId: book.id, ...book}});})
+            ),
           catchError(() =>
             of(ReadingListActions.failedAddToReadingList({ book }))
           )
@@ -54,9 +59,16 @@ export class ReadingListEffects implements OnInitEffects {
     )
   );
 
+    message: "Book is being added to Reading List";
+    action: "Undo";
+    options: {
+      duration: 5000,
+      verticalPosition: 'top'
+    };
+
   ngrxOnInitEffects() {
     return ReadingListActions.init();
   }
 
-  constructor(private actions$: Actions, private http: HttpClient) {}
+  constructor(private actions$: Actions, private http: HttpClient, private readonly snackBar: MatSnackBar) {}
 }
