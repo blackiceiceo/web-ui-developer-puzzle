@@ -17,6 +17,6 @@ describe('When: Use the search feature', () => {
 
     cy.wait(500);
 
-    cy.get('[data-testing="book-item"]').should('have.length', 10);
+    cy.get('[data-testing="book-item"]').should('have.length.greaterThan', 1);
   });
 });

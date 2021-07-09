@@ -10,7 +10,7 @@ import {
 import { FormBuilder } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, map ,takeUntil} from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
-import { Book, ReadingListItem } from '@tmo/shared/models';
+import { Book } from '@tmo/shared/models';
 
 @Component({
   selector: 'tmo-book-search',
@@ -39,8 +39,7 @@ export class BookSearchComponent implements OnInit, OnDestroy{
   }
 
   ngOnInit(): void {
-
-    this.searchForm.valueChanges.pipe(map(val => val.term),debounceTime(500), distinctUntilChanged(),
+    this.searchForm.get('term').valueChanges.pipe(map(val => val),debounceTime(500), distinctUntilChanged(),
     takeUntil(this.destroy)).subscribe( () => {
       this.searchBooks();
       this.cdr.detectChanges();
@@ -67,11 +66,7 @@ export class BookSearchComponent implements OnInit, OnDestroy{
   }
 
   searchBooks() {
-    if (this.searchForm.value.term) {
-      this.store.dispatch(searchBooks({ term: this.searchTerm }));
-    } else {
-      this.store.dispatch(clearSearch());
-    }
+    this.searchForm.value.term ? this.store.dispatch(searchBooks({ term: this.searchTerm })) : this.store.dispatch(clearSearch());
   }
 
   ngOnDestroy() {
