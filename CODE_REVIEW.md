@@ -1,8 +1,21 @@
-## Code Review:
+#### Code Review ####
+
+The 'okreads' app allows a user to search for books and add them to a reading list.
+The app is also desgin to allow the user to remove books from the reading list.
+The application uses Angular to create a front-end experience for the user, and
+NestJs to build Node.js server-side application. The application also uses NX to create
+a monorepo for which both the back-end and front-end are stored, along with NGRX for creating
+store that maintain the state of our data that is shared across multiple components.
+
+## Code Smells:
 1. Change the 'Change detection startegy' to onPush to avoid dirty checking and increase perferomance so that the whole component code will not run on every change.
 2. Change to correct tags when using titles, headers, subtitles, etc.
 3. Remove subscription for books for retreiving books and instead use async pipe.
 4. In reading-list.reducer.ts file, should change to 'confirmedAddtoReadingList' and 'confirmedRemoveFromReadingList' instead of using 'addToReadingList' and 'removeFromReadingList'.
+5. Give conventional naming sense from 'book--content' to 'book-content' and 'book--content--cover' to 'book-content-cover'.
+6. Instead of using the date function inside of book-search-component.ts, it is better to use the Date pipe because they can be used
+throughout the app.
+
 
 ## Lighthouse:
 1. The search button doees not have an accessible name.
