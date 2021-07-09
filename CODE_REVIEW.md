@@ -15,6 +15,7 @@ store that maintain the state of our data that is shared across multiple compone
 5. Give conventional naming sense from 'book--content' to 'book-content' and 'book--content--cover' to 'book-content-cover'.
 6. Instead of using the date function inside of book-search-component.ts, it is better to use the Date pipe because they can be used
 throughout the app.
+7. Inside total-count.component.ts we should not utilize angular lifecycle hooks ( ngOnInit(): void() ) without actually using it.
 
 
 ## Lighthouse:
